@@ -22,7 +22,7 @@ before_build:
 - ps: gitversion /l console /output buildserver /updateAssemblyInfo
 
 build_script:
-- build -c Release
+- dotnet build -c Release
 
 test_script:
 - snyk auth %snyk_api_key%
