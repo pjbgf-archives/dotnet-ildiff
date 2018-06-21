@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>DotNet.Ildiff</RootNamespace>
+    <Version>$(GitVersion_NuGetVersion)</Version>
+    <AssemblyVersion>$(GitVersion_AssemblySemVer)</AssemblyVersion>
+    <FileVersion>$(GitVersion_AssemblySemVer)</FileVersion>
+    <Description>Light-weight cross platform IL diff tool built in C#.</Description>
+    <PackAsTool>true</PackAsTool>
+    <PackageReleaseNotes>This is a proof of concept.</PackageReleaseNotes>
+    <PackageLicenseUrl>https://pjbgf.mit-license.org/</PackageLicenseUrl>
+    <PackageId>dotnet-ildiff</PackageId>
+    <PackageTags>dotnet-ildiff, ildiff, cil, msil, dotnet-cli, disassembler, dotnet-core</PackageTags>
+    <Authors>pjbgf</Authors>
+    <PackageProjectUrl>https://github.com/pjbgf/dotnet-ildiff</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/pjbgf/dotnet-ildiff</RepositoryUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>
