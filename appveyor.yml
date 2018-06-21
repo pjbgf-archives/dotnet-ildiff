@@ -1,0 +1,85 @@
+version: '{build}' 
+configuration:
+- Release
+platform: Any CPU 
+image: Visual Studio 2017
+
+environment: 
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  snyk_api_key:
+    secure: Z3y1Dvxw5oyXnJyeXuiiHuVTg6O8fa3jbvlF7p0mQntPHg/osIEsVpzWUvOlp4Z2
+  
+init:
+- ps: $Env:LABEL = "CI" + $Env:APPVEYOR_BUILD_NUMBER.PadLeft(5, "0") 
+
+install:
+- choco install gitversion.portable -y
+- npm install -g snyk
+- dotnet tool install -g dotnet-ildasm
+
+before_build:
+- nuget restore
+- ps: gitversion /l console /output buildserver /updateAssemblyInfo
+
+build_script:
+- build -c Release
+
+test_script:
+- snyk auth %snyk_api_key%
+- snyk test --file=src\dotnet-ildiff\obj\project.assets.json --org=pjbgf
+
+after_test:
+- dotnet pack src\dotnet-ildiff\dotnet-ildiff.csproj
+
+on_success:
+  - snyk monitor --file=src\dotnet-ildiff\obj\project.assets.json --project-name=dotnet-ildiff --org=pjbgf
+
+artifacts:
+- path: '**\*.nupkg'
+
+
+deploy:
+  - provider: NuGet
+    name: Unstable releases
+    server: https://www.myget.org/F/pjbgf/api/v2/package
+    api_key:
+      secure: jnSpdhFvTcq+3qoOA1HJmGoo6hwyFJdU/ryAYF6umUYMzpzq6bjvs/oe+Wrsob6m
+    artifact: /.*\.nupkg/
+    skip_symbols: true
+    prerelease: true
+    on:
+      branch: /feature.*/
+
+  - provider: NuGet
+    name: Preview releases
+    server: 
+    api_key:
+      secure: /ndfcg+DPzrEghZNXPELdI/mGYbglaBEZy4ZGpCyJ+1rYqHF1csEDDhH3sYteOJg
+    artifact: /.*\.nupkg/
+    skip_symbols: true
+    prerelease: true
+    on:
+      branch: /release.*/
+      
+  - provider: NuGet
+    name: Stable releases
+    server: 
+    api_key:
+      secure: /ndfcg+DPzrEghZNXPELdI/mGYbglaBEZy4ZGpCyJ+1rYqHF1csEDDhH3sYteOJg
+    artifact: /.*\.nupkg/
+    prerelease: true
+    on:
+      branch: master
+
+  - provider: GitHub
+    release: v$(GitVersion_NuGetVersion)
+    auth_token:
+      secure: RG/QNz1gYC7yCa+7vaTNGw+V4oB+/PynMDGryqWz+Tzf7pAEMyiXfQH5h6m3/VdL
+    draft: true
+    skip_symbols: false
+    prerelease: true
+    on:
+      branch: master
+
+skip_commits:
+  files: '**/*.md'

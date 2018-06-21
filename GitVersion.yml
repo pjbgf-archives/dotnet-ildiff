@@ -1,0 +1,11 @@
+branches:
+  features?[/-]:
+    mode: ContinuousDeployment
+    tag: alpha-build-
+  releases?[/-]:
+    mode: ContinuousDeployment
+    tag: alpha-
+  master: {}
+tag: beta-
+ignore:
+  sha: []
