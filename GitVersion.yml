@@ -5,7 +5,7 @@ branches:
   releases?[/-]:
     mode: ContinuousDeployment
     tag: alpha-
-  master: {}
-tag: beta-
+  master:
+    tag: beta-
 ignore:
   sha: []
