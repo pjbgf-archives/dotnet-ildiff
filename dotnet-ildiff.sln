@@ -11,6 +11,8 @@ ProjectSection(SolutionItems) = preProject
 	README.md = README.md
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-ildiff.Tests", "src\dotnet-ildiff.Tests\dotnet-ildiff.Tests.csproj", "{7EB5902E-AA5F-4737-9C64-63CAA440248F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,5 +23,9 @@ Global
 		{E5AB95C4-4554-4FE8-94F6-EFE25B4BCE39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5AB95C4-4554-4FE8-94F6-EFE25B4BCE39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5AB95C4-4554-4FE8-94F6-EFE25B4BCE39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EB5902E-AA5F-4737-9C64-63CAA440248F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EB5902E-AA5F-4737-9C64-63CAA440248F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EB5902E-AA5F-4737-9C64-63CAA440248F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EB5902E-AA5F-4737-9C64-63CAA440248F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

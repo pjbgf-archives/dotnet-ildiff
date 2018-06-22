@@ -2,41 +2,53 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace dotnet_ildiff
+namespace DotNet.Ildiff
 {
     class Program
     {
         static void Main(string[] args)
         {
-            if (args.Length < 2)
-            {
-                Console.WriteLine("Usage: dotnet ildiff assembly1.dll assembly2.dll");
-                return;
-            }
-
             Console.WriteLine("=== This is a POC for IL diff which depends on git diff. ===");
 
             if (!IsDotnetIldasmInstalled())
             {
-                Console.WriteLine(
-                    "This tool depends on dotnet-ildasm. Please execute 'dotnet tool install -g dotnet-ildasm' first.");
+                Console.WriteLine("This tool depends on dotnet-ildasm. Please execute 'dotnet tool install -g dotnet-ildasm' first.");
                 return;
             }
 
             if (!IsGitdiffInstalled())
             {
-                Console.WriteLine("This tool depends on git diff. Please make sure that is installede in your system.");
+                Console.WriteLine("This tool depends on git diff. Please make sure that is installed in your system.");
                 return;
             }
 
-            var sourceFile1 = args[0];
-            var sourceFile2 = args[1];
+            new ArgumentHandler(Execute);
+        }
+        
+        static int Execute(IldiffArguments argument)
+        {
             var targetFile1 = Path.GetTempFileName();
             var targetFile2 = Path.GetTempFileName();
 
-            ExecuteCommand("dotnet", $"ildasm {sourceFile1} -o {targetFile1} --force");
-            ExecuteCommand("dotnet", $"ildasm {sourceFile2} -o {targetFile2} --force");
-            ExecuteCommand("git", $"diff {targetFile1} {targetFile2}");
+            ExecuteCommand("dotnet", BuildIldasmCommand(argument.Assembly1, targetFile1, argument.Item));
+            ExecuteCommand("dotnet", BuildIldasmCommand(argument.Assembly2, targetFile2, argument.Item));
+            
+            var result = ExecuteCommand("git", $"diff {targetFile1} {targetFile2}");
+            
+            if (!string.IsNullOrEmpty(argument.OutputFile))
+                File.WriteAllText(argument.OutputFile, result);
+
+            return 0;
+        }
+
+        static string BuildIldasmCommand(string assemblyPath, string tempFilePath, string item)
+        {
+            string command = $"ildasm {assemblyPath} -o {tempFilePath} --force";
+            
+            if (!string.IsNullOrEmpty(item))
+                command += " -i " + item;
+
+            return command;
         }
 
         public static bool IsDotnetIldasmInstalled()
@@ -59,24 +71,25 @@ namespace dotnet_ildiff
             return true;
         }
 
-        public static string ExecuteCommand(string cmd, string args)
+        public static string ExecuteCommand(string command, string arguments)
         {
             var process = new Process()
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = cmd,
-                    Arguments = args,
+                    FileName = command,
+                    Arguments = arguments,
                     RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true,
                 }
             };
             
-            Console.WriteLine($"{cmd} {args}");
+            Console.WriteLine($"{command} {arguments}");
             process.Start();
             
             string result = process.StandardOutput.ReadToEnd();
+            
             process.WaitForExit();
             
             Console.WriteLine(result);
