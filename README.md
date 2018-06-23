@@ -5,7 +5,7 @@
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://pjbgf.mit-license.org)  
 
 # Description
-The `dotnet diff` compares the IL difference between two .NET assemblies. Simply send the assemblies path as parameter and as a result you will get the diff.
+The `dotnet ildiff` compares the IL difference between two .NET assemblies. Simply send the assemblies path as parameter and as a result you will get the diff.
 
 # Setup
 The project was created as a global CLI tool, therefore you can install with a single command:  
@@ -16,10 +16,10 @@ Notice that for the command above to work, you need .NET Core SDK 2.1.300 or abo
 
 # Syntax
 ```
-dotnet diff <ASSEMBLY1_PATH> <ASSEMBLY2_PATH>
-dotnet diff <ASSEMBLY1_PATH> <ASSEMBLY2_PATH> <-o|--output>
-dotnet diff <ASSEMBLY1_PATH> <ASSEMBLY2_PATH> <-i|--item>
-dotnet diff <-h|--help>
+dotnet ildiff <ASSEMBLY1_PATH> <ASSEMBLY2_PATH>
+dotnet ildiff <ASSEMBLY1_PATH> <ASSEMBLY2_PATH> <-o|--output>
+dotnet ildiff <ASSEMBLY1_PATH> <ASSEMBLY2_PATH> <-i|--item>
+dotnet ildiff <-h|--help>
 ```
 
 # Options
@@ -32,19 +32,19 @@ Define the output file to be created with the assembly's IL.
 # Examples
 Output IL diff to the command line:
 ```
-dotnet ildasm myassembly1.dll myassembly2.dll
+dotnet ildiff myassembly1.dll myassembly2.dll
 ```
 
 Filter results by method and/or classes to be disassembled, showing the result in the command line:
 ```
-dotnet ildasm myassembly1.dll myassembly2.dll -i ClassName
-dotnet ildasm myassembly1.dll myassembly2.dll -i ::MethodName
-dotnet ildasm myassembly1.dll myassembly2.dll -i ClassName::MethodName
+dotnet ildiff myassembly1.dll myassembly2.dll -i ClassName
+dotnet ildiff myassembly1.dll myassembly2.dll -i ::MethodName
+dotnet ildiff myassembly1.dll myassembly2.dll -i ClassName::MethodName
 ```
 
 Define the file to be created with the output: 
 ```
-dotnet ildasm myassembly1.dll myassembly2.dll -o disassembledAssembly.il
+dotnet ildiff myassembly1.dll myassembly2.dll -o disassembledAssembly.il
 ```
   
 # Powered by
