@@ -1,6 +1,6 @@
 namespace DotNet.Ildiff
 {
-    public class IldiffArguments
+    public class CommandArgument
     {
         public string Assembly1 { get; set; }
         public string Assembly2 { get; set; }

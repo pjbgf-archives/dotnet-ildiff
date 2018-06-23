@@ -5,14 +5,14 @@ using Xunit;
 
 namespace DotNet.Ildiff.Tests
 {
-    public class ArgumentHandlerShould
+    public class CommandHandlerShould
     {
-        private Func<IldiffArguments, int> _executor;
+        private Func<CommandArgument, int> _executor;
         private Func<int> _showHelp;
 
-        public ArgumentHandlerShould()
+        public CommandHandlerShould()
         {
-            _executor = Substitute.For<Func<IldiffArguments, int>>();
+            _executor = Substitute.For<Func<CommandArgument, int>>();
             _showHelp = Substitute.For<Func<int>>();
         }
 
@@ -20,8 +20,8 @@ namespace DotNet.Ildiff.Tests
         public void Execute_Command_With_Assembly1_And_Assembly2()
         {
             var arguments = new string[] {"assembly1.dll", "assembly2.dll"};
-            var handler = new ArgumentHandler(_executor, _showHelp);
-            var expected = new IldiffArguments
+            var handler = new CommandHandler(_executor, _showHelp);
+            var expected = new CommandArgument
             {
                 Assembly1 = "assembly1.dll",
                 Assembly2 = "assembly2.dll"
@@ -29,7 +29,7 @@ namespace DotNet.Ildiff.Tests
 
             handler.Handle(arguments);
 
-            _executor.Received(1).Invoke(Arg.Is<IldiffArguments>(x =>
+            _executor.Received(1).Invoke(Arg.Is<CommandArgument>(x =>
                 x.Assembly1 == expected.Assembly1 && 
                 x.Assembly2 == expected.Assembly2));
         }
@@ -38,8 +38,8 @@ namespace DotNet.Ildiff.Tests
         public void Execute_Command_With_Assembly1_Assembly2_With_Output_File()
         {
             var arguments = new string[] {"assembly1.dll", "assembly2.dll", "-o", "output.il"};
-            var handler = new ArgumentHandler(_executor, _showHelp);
-            var expected = new IldiffArguments
+            var handler = new CommandHandler(_executor, _showHelp);
+            var expected = new CommandArgument
             {
                 Assembly1 = "assembly1.dll",
                 Assembly2 = "assembly2.dll",
@@ -48,7 +48,7 @@ namespace DotNet.Ildiff.Tests
 
             handler.Handle(arguments);
 
-            _executor.Received(1).Invoke(Arg.Is<IldiffArguments>(x =>
+            _executor.Received(1).Invoke(Arg.Is<CommandArgument>(x =>
                 x.Assembly1 == expected.Assembly1 && 
                 x.Assembly2 == expected.Assembly2 && 
                 x.OutputFile == expected.OutputFile));
@@ -58,8 +58,8 @@ namespace DotNet.Ildiff.Tests
         public void Execute_Command_With_Assembly1_Assembly2_And_Item_With_Output_File()
         {
             var arguments = new string[] {"assembly1.dll", "assembly2.dll", "-o", "output.il", "-i", "::Method"};
-            var handler = new ArgumentHandler(_executor, _showHelp);
-            var expected = new IldiffArguments
+            var handler = new CommandHandler(_executor, _showHelp);
+            var expected = new CommandArgument
             {
                 Assembly1 = "assembly1.dll",
                 Assembly2 = "assembly2.dll",
@@ -69,7 +69,7 @@ namespace DotNet.Ildiff.Tests
 
             handler.Handle(arguments);
 
-            _executor.Received(1).Invoke(Arg.Is<IldiffArguments>(x =>
+            _executor.Received(1).Invoke(Arg.Is<CommandArgument>(x =>
                 x.Assembly1 == expected.Assembly1 && 
                 x.Assembly2 == expected.Assembly2 && 
                 x.OutputFile == expected.OutputFile && 
@@ -80,8 +80,8 @@ namespace DotNet.Ildiff.Tests
         public void Execute_Command_With_Assembly1_Assembly2_And_Item()
         {
             var arguments = new string[] {"assembly1.dll", "assembly2.dll", "-i", "::Method"};
-            var handler = new ArgumentHandler(_executor, _showHelp);
-            var expected = new IldiffArguments
+            var handler = new CommandHandler(_executor, _showHelp);
+            var expected = new CommandArgument
             {
                 Assembly1 = "assembly1.dll",
                 Assembly2 = "assembly2.dll",
@@ -90,7 +90,7 @@ namespace DotNet.Ildiff.Tests
 
             handler.Handle(arguments);
 
-            _executor.Received(1).Invoke(Arg.Is<IldiffArguments>(x =>
+            _executor.Received(1).Invoke(Arg.Is<CommandArgument>(x =>
                 x.Assembly1 == expected.Assembly1 && 
                 x.Assembly2 == expected.Assembly2 && 
                 x.Item == expected.Item));
@@ -100,7 +100,7 @@ namespace DotNet.Ildiff.Tests
         public void Print_Help_If_No_Arguments()
         {
             var arguments = new string[] {};
-            var handler = new ArgumentHandler(_executor, _showHelp);
+            var handler = new CommandHandler(_executor, _showHelp);
 
             handler.Handle(arguments);
 

@@ -3,13 +3,13 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace DotNet.Ildiff
 {
-    public class ArgumentHandler
+    public class CommandHandler
     {
-        private readonly Func<IldiffArguments, int> _executor;
+        private readonly Func<CommandArgument, int> _executor;
         private CommandLineApplication _commandLineApplication;
         private Func<int> _showHelp;
 
-        public ArgumentHandler(Func<IldiffArguments, int> executor, Func<int> showHelp = null)
+        public CommandHandler(Func<CommandArgument, int> executor, Func<int> showHelp = null)
         {
             Init();
             
@@ -41,7 +41,7 @@ namespace DotNet.Ildiff
             {
                 if (!string.IsNullOrEmpty(assembly1.Value) && !string.IsNullOrEmpty(assembly2.Value))
                 {
-                    var arguments = new IldiffArguments();
+                    var arguments = new CommandArgument();
                     arguments.Assembly1 = assembly1.Value;
                     arguments.Assembly2 = assembly2.Value;
 

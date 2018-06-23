@@ -8,8 +8,6 @@ namespace DotNet.Ildiff
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("=== This is a POC for IL diff which depends on git diff. ===");
-
             if (!IsDotnetIldasmInstalled())
             {
                 Console.WriteLine("This tool depends on dotnet-ildasm. Please execute 'dotnet tool install -g dotnet-ildasm' first.");
@@ -22,10 +20,10 @@ namespace DotNet.Ildiff
                 return;
             }
 
-            new ArgumentHandler(Execute);
+            new CommandHandler(Execute);
         }
         
-        static int Execute(IldiffArguments argument)
+        static int Execute(CommandArgument argument)
         {
             var targetFile1 = Path.GetTempFileName();
             var targetFile2 = Path.GetTempFileName();
