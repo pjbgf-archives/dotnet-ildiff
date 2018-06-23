@@ -20,7 +20,8 @@ namespace DotNet.Ildiff
                 return;
             }
 
-            new CommandHandler(Execute);
+            var handler = new CommandHandler(Execute);
+            handler.Handle(args);
         }
         
         static int Execute(CommandArgument argument)
@@ -31,7 +32,7 @@ namespace DotNet.Ildiff
             ExecuteCommand("dotnet", BuildIldasmCommand(argument.Assembly1, targetFile1, argument.Item));
             ExecuteCommand("dotnet", BuildIldasmCommand(argument.Assembly2, targetFile2, argument.Item));
             
-            var result = ExecuteCommand("git", $"diff {targetFile1} {targetFile2}");
+            var result = ExecuteCommand("git", $"diff {targetFile1} {targetFile2}", false, true);
             
             if (!string.IsNullOrEmpty(argument.OutputFile))
                 File.WriteAllText(argument.OutputFile, result);
@@ -69,7 +70,7 @@ namespace DotNet.Ildiff
             return true;
         }
 
-        public static string ExecuteCommand(string command, string arguments)
+        public static string ExecuteCommand(string command, string arguments, bool printCommand = false, bool printOutput = false)
         {
             var process = new Process()
             {
@@ -83,14 +84,16 @@ namespace DotNet.Ildiff
                 }
             };
             
-            Console.WriteLine($"{command} {arguments}");
+            if (printCommand)
+                Console.WriteLine($"{command} {arguments}");
+            
             process.Start();
             
             string result = process.StandardOutput.ReadToEnd();
-            
             process.WaitForExit();
             
-            Console.WriteLine(result);
+            if (printOutput)
+                Console.WriteLine(result);
             
             return result;
         }
