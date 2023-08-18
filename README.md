@@ -10,7 +10,7 @@ The `dotnet ildiff` compares the IL difference between two .NET assemblies. Simp
 # Setup
 The project was created as a global CLI tool, therefore you can install with a single command:  
 
-`dotnet tool install -g dotnet-diff`
+`dotnet tool install -g dotnet-ildiff`
 
 Notice that for the command above to work, you need .NET Core SDK 2.1.300 or above installed in your machine.
 
